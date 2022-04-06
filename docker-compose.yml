@@ -1,0 +1,30 @@
+version: '3.1'
+services:
+  mysql:
+    hostname: mysql-hostname
+    image: mysql
+    container_name: ms9-mysql
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+    networks:
+      - ms9_netw
+  ms9:
+    image: ms9:v4
+    restart: always
+    ports:
+      - 9090:9090
+    environment:
+      DB_CONNECTION_IP: "mysql-hostname"
+    networks:
+      - ms9_netw
+    depends_on:
+      - mysql
+
+networks:
+  ms9_netw:
+volumes:
+  db_data:
